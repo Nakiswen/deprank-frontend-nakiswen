@@ -5,7 +5,8 @@ import Link from 'next/link';
 import CodeBlock from '@/components/CodeBlock';
 import Background from '@/components/Background';
 import auth from '@/lib/auth';
-import '../../../dependency/[name]/highlight.css'; // 修正引用路径
+import { getDependencyDetails } from '@/lib/api';
+import '@/styles/highlight.css';
 
 interface DependencyDetailPageProps {
   params: {
@@ -49,19 +50,16 @@ export default function DependencyDetailPage({ params }: DependencyDetailPagePro
       try {
         setIsLoading(true);
         
-        // 从API获取依赖信息（这里使用模拟数据，实际项目中应调用真实API）
-        const response = await fetch(`/mocks/api/web/dependency-details.json`);
-        if (!response.ok) {
-          throw new Error('无法获取依赖信息');
-        }
+        const dependencyId = `${org}/${repo}`;
+        // 使用api模块中的getDependencyDetails方法获取依赖信息
+        const result = await getDependencyDetails(dependencyId);
         
-        const data = await response.json();
-        if (!data[dependency]) {
-          throw new Error('找不到此依赖信息');
+        if (!result.success || !result.data) {
+          throw new Error(result.message || '找不到此依赖信息');
         }
         
         // 获取依赖信息
-        const dependencyData = data[dependency];
+        const dependencyData = result.data;
         
         // 解析贡献者GitHub用户名（去掉@前缀）
         const contributorUsername = dependencyData.contributor.startsWith('@')

@@ -6,20 +6,54 @@
 // 模拟API请求延迟
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+// API响应接口定义
+interface ApiResponse<T> {
+  success: boolean;
+  message?: string;
+  data: T;
+}
+
+// 依赖列表响应数据
+interface DependencyListData {
+  list: Array<{
+    name: string;
+    org: string;
+    repo: string;
+    contributor: string;
+    contributionPercentage: number;
+    lastUpdated: string;
+    status: 'completed' | 'in_progress' | 'pending'; // 添加工作流状态
+  }>;
+  isProjectOwner: boolean; // 添加项目方视角标志
+}
+
+// 依赖详情响应数据
+interface DependencyDetailsData {
+  name: string;
+  contributor: string;
+  contributionPercentage: number;
+  lastUpdated: string;
+  codeSnippet?: string;
+  workflowSteps: Array<{
+    id: number;
+    title: string;
+    description: string;
+    status: 'completed' | 'in_progress' | 'pending';
+  }>;
+}
+
 /**
  * 获取依赖列表
- * @param org 组织名称
- * @param repo 仓库名称
+ * @param org - GitHub组织名
+ * @param repo - 仓库名
+ * @returns Promise<ApiResponse<DependencyListData>>
  */
-export async function getDependencyList(org: string, repo: string) {
+export async function getDependencyList(org: string, repo: string): Promise<ApiResponse<DependencyListData>> {
   try {
-    // 模拟API请求延迟
-    await delay(500);
-    
-    // 从public目录下的mock文件获取数据
+    // const response = await fetch(`/api/dependencies/${org}/${repo}`);
     const response = await fetch('/mocks/api/web/dependency-list.json');
     const data = await response.json();
-    
+    console.log("🚀 ~ getDependencyList ~ data:", data)
     return {
       success: true,
       data,
@@ -27,11 +61,7 @@ export async function getDependencyList(org: string, repo: string) {
     };
   } catch (error) {
     console.error('Failed to fetch dependency list:', error);
-    return {
-      success: false,
-      data: [],
-      message: 'Failed to fetch dependency list'
-    };
+    throw error;
   }
 }
 

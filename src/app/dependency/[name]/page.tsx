@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Background from '@/components/Background';
 import { getDependencyDetails } from '@/lib/api';
-import './highlight.css';
+import '@/styles/highlight.css';
 
 interface DependencyDetailProps {
   params: {

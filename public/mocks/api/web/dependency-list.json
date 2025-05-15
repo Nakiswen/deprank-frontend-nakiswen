@@ -42,5 +42,37 @@
       "contributionPercentage": 70,
       "lastUpdated": "2024-03-20"
     }
+  ],
+  "Nakiswen/deprank": [
+    {
+      "name": "canvas-confetti",
+      "contributor": "@catdad",
+      "contributionPercentage": 92,
+      "lastUpdated": "2024-04-05"
+    },
+    {
+      "name": "tailwindcss",
+      "contributor": "@adamwathan",
+      "contributionPercentage": 88,
+      "lastUpdated": "2024-03-28"
+    },
+    {
+      "name": "web3",
+      "contributor": "@web3js",
+      "contributionPercentage": 75,
+      "lastUpdated": "2024-04-10"
+    },
+    {
+      "name": "better-auth",
+      "contributor": "@authjs",
+      "contributionPercentage": 80,
+      "lastUpdated": "2024-02-15"
+    },
+    {
+      "name": "fetch-api",
+      "contributor": "@whatwg",
+      "contributionPercentage": 95,
+      "lastUpdated": "2024-01-22"
+    }
   ]
 }

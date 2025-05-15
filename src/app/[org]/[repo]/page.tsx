@@ -27,7 +27,7 @@ interface Dependency {
 export default function DependencyListPage({ params }: DependencyPageProps) {
   const { org, repo } = params;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isWorkflowStarted, setIsWorkflowStarted] = useState(false);
+  const [isProjectOwner, setIsProjectOwner] = useState(false); // 替换isWorkflowStarted
   const [dependencies, setDependencies] = useState<Dependency[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,6 +40,7 @@ export default function DependencyListPage({ params }: DependencyPageProps) {
         const result = await getDependencyList(org, repo);
         if (result.success) {
           setDependencies(result.data.list);
+          setIsProjectOwner(result.data.isProjectOwner); // 设置项目方视角标志
           setError(null);
         } else {
           setError(result.message || '获取依赖数据失败');
@@ -57,24 +58,20 @@ export default function DependencyListPage({ params }: DependencyPageProps) {
     fetchDependencies();
   }, [org, repo]);
 
-  // 检查用户是否已登录和工作流是否已启动
+  // 检查用户是否已登录
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
         // 检查Better Auth登录状态
         const session = await auth.getSession();
         setIsLoggedIn(!!session);
-        
-        // 检查工作流状态
-        const workflowStatus = localStorage.getItem(`workflow_${org}_${repo}`);
-        setIsWorkflowStarted(workflowStatus === 'started');
       } catch (error) {
-        console.error('Failed to check status:', error);
+        console.error('Failed to check auth status:', error);
       }
     };
     
     checkAuthStatus();
-  }, [org, repo]);
+  }, []);
 
   // 处理启动工作流
   const handleStartWorkflow = async () => {
@@ -96,7 +93,7 @@ export default function DependencyListPage({ params }: DependencyPageProps) {
   return (
     <main className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-12 pt-32">
       <Background />
-      <div className="w-full max-w-4xl mx-auto">
+      <div className="relative w-full max-w-4xl mx-auto">
         {/* 仓库信息卡片 */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 bg-white/90 rounded-2xl shadow-xl border border-gray-100 px-8 py-6">
           <div>
@@ -104,26 +101,6 @@ export default function DependencyListPage({ params }: DependencyPageProps) {
               {org}/{repo}
             </h1>
             <p className="text-gray-600">依赖包列表</p>
-          </div>
-        </div>
-
-        {/* 搜索框 */}
-        <div className="mb-8 flex justify-center">
-          <div className="relative w-full max-w-xl">
-            <input 
-              type="text" 
-              placeholder="搜索依赖名称或贡献者" 
-              className="w-full pl-12 pr-24 py-5 rounded-2xl bg-white/90 shadow-lg border border-gray-200 focus:ring-2 focus:ring-primary focus:border-transparent text-lg text-gray-900 placeholder-gray-400 transition-all duration-200 outline-none"
-            />
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-              <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <circle cx="11" cy="11" r="8"/>
-                <path d="M21 21l-4.35-4.35"/>
-              </svg>
-            </span>
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 text-gray-400 bg-gray-100 rounded-lg px-2 py-1 text-xs font-mono shadow-sm border border-gray-200 select-none">
-              <span className="hidden sm:inline">⌘</span>K
-            </span>
           </div>
         </div>
 
@@ -171,7 +148,10 @@ export default function DependencyListPage({ params }: DependencyPageProps) {
               {dependencies.map((item, index) => (
                 <div key={index} className="grid grid-cols-12 gap-4 px-8 py-5 hover:bg-primary/10 transition">
                   <div className="col-span-4">
-                    <Link href={`/${org}/${repo}/${item.name}`} className="text-primary hover:text-secondary font-medium">
+                    <Link 
+                      href={isProjectOwner ? `/${org}/${repo}/workflow/${item.name}` : `/${org}/${repo}/${item.name}`} 
+                      className="text-primary hover:text-secondary font-medium"
+                    >
                       {item.name}
                     </Link>
                   </div>
@@ -204,8 +184,8 @@ export default function DependencyListPage({ params }: DependencyPageProps) {
           </div>
         )}
         
-        {/* 启动工作流按钮 - 只有在未启动工作流时显示 */}
-        {!isWorkflowStarted && (
+        {/* 启动工作流按钮 - 只有在非项目方视角时显示 */}
+        {!isProjectOwner && (
           <div className="fixed bottom-10 left-0 right-0 flex justify-center">
             <button 
               onClick={handleStartWorkflow}

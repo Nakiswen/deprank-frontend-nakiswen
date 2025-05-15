@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 200 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 添加标题和描述以提高可访问性 -->
+  <title>DEPRANK Logo</title>
+  <desc>DEPRANK品牌标志，采用现代简约设计风格</desc>
+  
+  <!-- 主文本 -->
+  <text 
+    x="0" 
+    y="26" 
+    font-family="Montserrat, Orbitron, Arial, sans-serif" 
+    font-size="26" 
+    font-weight="bold" 
+    letter-spacing="2" 
+    fill="#111"
+    aria-label="DEPRANK">
+    DEPRANK
+  </text>
+  
+  <!-- 装饰性元素：自定义字母修饰 -->
+  <!-- E的中间横线 -->
+  <rect x="22" y="16" width="7" height="2.5" fill="#fff">
+    <animate 
+      attributeName="width" 
+      values="7;9;7" 
+      dur="3s" 
+      repeatCount="indefinite" 
+      begin="0s"/>
+  </rect>
+  
+  <!-- A的横线移除 -->
+  <rect x="48" y="13" width="10" height="2.5" fill="#fff">
+    <animate 
+      attributeName="opacity" 
+      values="1;0.5;1" 
+      dur="3s" 
+      repeatCount="indefinite" 
+      begin="0.5s"/>
+  </rect>
+  
+  <!-- K的锐角装饰 -->
+  <rect x="85" y="18" width="10" height="2.5" fill="#fff">
+    <animate 
+      attributeName="transform" 
+      type="rotate"
+      values="0 90 19;5 90 19;0 90 19"
+      dur="3s"
+      repeatCount="indefinite"
+      begin="1s"/>
+  </rect>
+  
+  <!-- 添加渐变效果 -->
+  <defs>
+    <linearGradient id="logoGradient" x1="0" y1="0" x2="200" y2="0">
+      <stop offset="0%" stop-color="#111" />
+      <stop offset="100%" stop-color="#333" />
+    </linearGradient>
+  </defs>
+</svg> 

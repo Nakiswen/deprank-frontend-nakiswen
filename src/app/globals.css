@@ -59,6 +59,52 @@ body {
   }
 }
 
+/* Slide-in animation */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+/* Search dropdown animation */
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOutUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
 /* Animation classes */
 .animate-fade-in {
   animation: fade-in 1s both;
@@ -72,6 +118,22 @@ body {
   animation: bounce-in 0.8s both;
 }
 
+.animate-slideDown {
+  animation: slideDown 0.3s ease-out forwards;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+.animate-slideInDown {
+  animation: slideInDown 0.3s ease-out forwards;
+}
+
+.animate-slideOutUp {
+  animation: slideOutUp 0.3s ease-out forwards;
+}
+
 .delay-100 {
   animation-delay: 0.1s;
 }
@@ -80,7 +142,7 @@ body {
   animation-delay: 0.2s;
 }
 
-/* 自定义动画样式和渐变背景 */
+/* Custom animation styles and gradient background */
 @keyframes bg-move {
   0% {
     background-position: 0% 50%;
@@ -109,7 +171,7 @@ body {
 /* Search dropdown animation */
 .search-dropdown {
   opacity: 0;
-  transform: translateY(16px) scale(0.98);
+  transform: translateY(-16px) scale(0.98);
   pointer-events: none;
   transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1),
     transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -140,7 +202,26 @@ body {
   background: rgba(156, 163, 175, 0.7);
 }
 
-/* 文本样式 */
+/* Text styles */
 .text-balance {
   text-wrap: balance;
+}
+
+/* Homepage layout styles - modified to flex layout to avoid scrollbars */
+.homepage-container {
+  min-height: 100vh;
+  height: 100vh; /* Ensure fixed height not exceeding one screen */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Prevent scrollbars */
+}
+
+.homepage-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 0; /* Remove extra top padding */
+  padding-bottom: 0; /* Remove extra bottom padding */
 }

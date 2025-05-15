@@ -34,5 +34,15 @@
     "forks": 86000,
     "contributors": 2800,
     "workflow_status": "not_started"
+  },
+  "Nakiswen/deprank": {
+    "org": "Nakiswen",
+    "repo": "deprank",
+    "description": "一个创新的依赖管理和贡献者奖励平台，帮助开源项目更好地管理依赖并激励贡献者。",
+    "stars": 568,
+    "forks": 127,
+    "contributors": 24,
+    "workflow_status": "in_progress",
+    "owner": "@Nakiswen"
   }
 } 

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Background from '@/components/Background';
 import SuccessAnimation from '@/components/SuccessAnimation';
 import ErrorModal from '@/components/ErrorModal';
-import '../../../../dependency/[name]/highlight.css'; // 引入样式
+import '@/styles/highlight.css'; // 修正为全局样式路径
 
 interface ClaimPageProps {
   params: {
