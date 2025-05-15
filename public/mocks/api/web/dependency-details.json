@@ -1,0 +1,42 @@
+{
+  "react": {
+    "name": "react",
+    "contributor": "@facebook",
+    "contributionPercentage": 85,
+    "lastUpdated": "2024-03-15",
+    "description": "A declarative, efficient, and flexible JavaScript library for building user interfaces.",
+    "version": "18.2.0",
+    "dependencies": ["loose-envify", "scheduler", "prop-types"],
+    "codeSnippet": "import React, { useState } from 'react';\n\nfunction ExampleComponent() {\n  const [count, setCount] = useState(0);\n  \n  return (\n    <div>\n      <p>You clicked {count} times</p>\n      <button onClick={() => setCount(count + 1)}>\n        Click me\n      </button>\n    </div>\n  );\n}\n\nexport default ExampleComponent;"
+  },
+  "vue": {
+    "name": "vue",
+    "contributor": "@vuejs",
+    "contributionPercentage": 75,
+    "lastUpdated": "2024-03-14",
+    "description": "Vue.js is a progressive, incrementally-adoptable JavaScript framework for building UI on the web.",
+    "version": "3.3.4",
+    "dependencies": ["@vue/reactivity", "@vue/runtime-core", "@vue/shared"],
+    "codeSnippet": "<template>\n  <div>\n    <p>You clicked {{ count }} times</p>\n    <button @click=\"count++\">Click me</button>\n  </div>\n</template>\n\n<script>\nexport default {\n  data() {\n    return {\n      count: 0\n    }\n  }\n}\n</script>"
+  },
+  "lodash": {
+    "name": "lodash",
+    "contributor": "@lodash",
+    "contributionPercentage": 65,
+    "lastUpdated": "2024-03-10",
+    "description": "A modern JavaScript utility library delivering modularity, performance, & extras.",
+    "version": "4.17.21",
+    "dependencies": [],
+    "codeSnippet": "import _ from 'lodash';\n\n// Array manipulation\nconst array = [1, 2, 3, 4];\nconst evens = _.filter(array, n => n % 2 === 0);\n\n// Object manipulation\nconst object = { 'a': 1, 'b': 2, 'c': 3 };\nconst values = _.values(object);\n\n// Function utilities\nconst debounced = _.debounce(() => console.log('Debounced!'), 300);"
+  },
+  "axios": {
+    "name": "axios",
+    "contributor": "@axios",
+    "contributionPercentage": 55,
+    "lastUpdated": "2024-03-08",
+    "description": "Promise based HTTP client for the browser and node.js",
+    "version": "1.4.0",
+    "dependencies": ["follow-redirects", "form-data", "proxy-from-env"],
+    "codeSnippet": "import axios from 'axios';\n\n// Make a request for a user with a given ID\naxios.get('/user?ID=12345')\n  .then(function (response) {\n    // handle success\n    console.log(response);\n  })\n  .catch(function (error) {\n    // handle error\n    console.log(error);\n  });"
+  }
+} 

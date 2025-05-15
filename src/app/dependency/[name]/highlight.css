@@ -1,0 +1,88 @@
+/* 导入highlight.js的GitHub Light主题 */
+@import 'highlight.js/styles/github.css';
+
+/* GitHub明亮风格代码块样式 */
+pre {
+  background-color: #f6f8fa;
+  border-radius: 6px;
+  padding: 16px;
+  overflow: auto;
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  font-size: 85%;
+  line-height: 1.45;
+  white-space: pre !important;
+  tab-size: 4;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  color: #24292f;
+  white-space: pre !important;
+}
+
+/* 代码行号和行样式 */
+.code-line {
+  display: flex;
+  position: relative;
+  min-height: 1.5em;
+  line-height: 1.5;
+  white-space: pre !important;
+}
+
+.code-line:hover {
+  background-color: #f0f5ff;
+}
+
+.line-number {
+  position: absolute;
+  left: 0;
+  color: #6e7781;
+  text-align: right;
+  width: 3em;
+  padding-right: 1.5em;
+  user-select: none;
+  opacity: 0.5;
+}
+
+.code-content {
+  padding-left: 4em;
+  display: block;
+  width: 100%;
+}
+
+/* 语法高亮颜色 - GitHub明亮主题 */
+.hljs-keyword {
+  color: #cf222e;
+}
+
+.hljs-built_in {
+  color: #0550ae;
+}
+
+.hljs-type {
+  color: #953800;
+}
+
+.hljs-literal {
+  color: #0550ae;
+}
+
+.hljs-number {
+  color: #0550ae;
+}
+
+.hljs-comment {
+  color: #6e7781;
+}
+
+.hljs-string {
+  color: #0a3069;
+}
+
+.hljs-attr {
+  color: #24292f;
+}
+
+.hljs-meta {
+  color: #116329;
+} 

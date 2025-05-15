@@ -1,0 +1,38 @@
+{
+  "facebook/react": {
+    "org": "facebook",
+    "repo": "react",
+    "description": "A declarative, efficient, and flexible JavaScript library for building user interfaces.",
+    "stars": 204000,
+    "forks": 42000,
+    "contributors": 1600,
+    "workflow_status": "not_started"
+  },
+  "microsoft/vscode": {
+    "org": "microsoft",
+    "repo": "vscode",
+    "description": "Visual Studio Code is a code editor redefined and optimized for building and debugging modern web and cloud applications.",
+    "stars": 145000,
+    "forks": 25000,
+    "contributors": 1300,
+    "workflow_status": "not_started"
+  },
+  "vuejs/vue": {
+    "org": "vuejs",
+    "repo": "vue",
+    "description": "Vue.js is a progressive, incrementally-adoptable JavaScript framework for building UI on the web.",
+    "stars": 200000,
+    "forks": 32000,
+    "contributors": 350,
+    "workflow_status": "not_started"
+  },
+  "tensorflow/tensorflow": {
+    "org": "tensorflow",
+    "repo": "tensorflow",
+    "description": "An Open Source Machine Learning Framework for Everyone",
+    "stars": 175000,
+    "forks": 86000,
+    "contributors": 2800,
+    "workflow_status": "not_started"
+  }
+} 

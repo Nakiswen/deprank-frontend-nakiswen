@@ -1,0 +1,46 @@
+{
+  "list": [
+    {
+      "name": "react",
+      "contributor": "Nakiswen",
+      "contributionPercentage": 85,
+      "lastUpdated": "2024-03-15"
+    },
+    {
+      "name": "vue",
+      "contributor": "@vuejs",
+      "contributionPercentage": 75,
+      "lastUpdated": "2024-03-14"
+    },
+    {
+      "name": "lodash",
+      "contributor": "@lodash",
+      "contributionPercentage": 65,
+      "lastUpdated": "2024-03-10"
+    },
+    {
+      "name": "axios",
+      "contributor": "@axios",
+      "contributionPercentage": 55,
+      "lastUpdated": "2024-03-08"
+    },
+    {
+      "name": "express",
+      "contributor": "@expressjs",
+      "contributionPercentage": 80,
+      "lastUpdated": "2024-03-05"
+    },
+    {
+      "name": "typescript",
+      "contributor": "@microsoft",
+      "contributionPercentage": 90,
+      "lastUpdated": "2024-03-12"
+    },
+    {
+      "name": "next",
+      "contributor": "@vercel",
+      "contributionPercentage": 70,
+      "lastUpdated": "2024-03-20"
+    }
+  ]
+}
