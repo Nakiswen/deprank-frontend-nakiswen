@@ -42,3 +42,6 @@ next-env.d.ts
 
 /designs/
 /docs/
+
+# lock
+pnpm-lock.yaml
