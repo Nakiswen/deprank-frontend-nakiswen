@@ -1,26 +1,26 @@
 /* Import highlight.js GitHub Light theme */
 @import url('highlight.js/styles/github.css');
 
-/* 代码块容器基础样式 */
+/* Basic styles for code block container */
 pre {
   margin: 0;
-  padding: 1.5rem 0;  /* 增加上下内边距 */
+  padding: 1.5rem 0;  /* Add top and bottom padding */
   background: #f6f8fa;
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   font-size: 14px;
-  line-height: 1.6;  /* 增加行高 */
+  line-height: 1.6;  /* Increase line height */
 }
 
 pre code {
   display: block;
-  padding: 0 1.5rem;  /* 保持左右内边距 */
+  padding: 0 1.5rem;  /* Maintain left and right padding */
 }
 
-/* 代码行容器样式 */
+/* Code line container styles */
 .code-line {
   display: flex;
-  min-height: 1.6em;  /* 匹配行高 */
-  padding: 0 0;  /* 增加行间距 */
+  min-height: 1.6em;  /* Match line height */
+  padding: 0 0;  /* Increase line spacing */
   background: transparent;
   transition: background-color 0.1s ease;
 }
@@ -29,7 +29,7 @@ pre code {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
-/* 行号样式 */
+/* Line number styles */
 .line-number {
   display: inline-block;
   width: 3.5em;
@@ -42,14 +42,14 @@ pre code {
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
 }
 
-/* 代码内容样式 */
+/* Code content styles */
 .code-content {
   flex: 1;
   padding-right: 1em;
   white-space: pre;
 }
 
-/* 语法高亮颜色 - GitHub Light主题 */
+/* Syntax highlighting colors - GitHub Light theme */
 .hljs-comment,
 .hljs-quote {
   color: #6a737d;

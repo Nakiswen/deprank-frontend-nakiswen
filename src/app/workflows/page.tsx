@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import auth from '@/lib/auth';
+import { useSession, signIn } from 'next-auth/react';
 
 /**
  * My Workflow page component
@@ -10,10 +10,9 @@ import auth from '@/lib/auth';
  */
 export default function MyWorkflowPage() {
   const router = useRouter();
+  const { data: session, status } = useSession();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState('');
   const [repositories, setRepositories] = useState<Array<{
     id: number;
     name: string;
@@ -23,29 +22,14 @@ export default function MyWorkflowPage() {
     updated_at: string;
   }>>([]);
   
+  // Check if user is logged in
+  const isLoggedIn = status === 'authenticated' && !!session;
+  
+  // Get username
+  const userName = session?.user?.username || session?.user?.name || '';
+  
   // Add state for active filter
   const [activeFilter, setActiveFilter] = useState<'all' | 'not_started' | 'in_progress' | 'completed'>('all');
-
-  // Check if user is logged in and update user information
-  const checkAuthStatus = async () => {
-    try {
-      const session = await auth.getSession();
-      if (session) {
-        setIsLoggedIn(true);
-        setUserName(session.login);
-        fetchUserRepositories(session.login);
-      } else {
-        setIsLoggedIn(false);
-        setUserName('');
-        setError('Please login with your GitHub account first');
-        setIsLoading(false);
-      }
-    } catch (error) {
-      console.error('Failed to get session info:', error);
-      setError('Failed to get user information, please login again');
-      setIsLoading(false);
-    }
-  };
 
   // Get user repository list
   const fetchUserRepositories = async (username: string) => {
@@ -135,10 +119,24 @@ export default function MyWorkflowPage() {
     return counts;
   }, [repositories]);
   
-  // Check login status on initial load
+  // Load user repository data
   useEffect(() => {
-    checkAuthStatus();
-  }, []);
+    if (status === 'loading') {
+      return; // Wait for session status to finish loading
+    }
+    
+    if (isLoggedIn && userName) {
+      fetchUserRepositories(userName);
+    } else if (status === 'unauthenticated') {
+      setIsLoading(false);
+      setError('Please log in with your GitHub account to view your workflows');
+    }
+  }, [status, isLoggedIn, userName]);
+
+  // Handle login button click
+  const handleLogin = async () => {
+    await signIn('github', { callbackUrl: '/workflows' });
+  };
 
   // Render repository status badge
   const renderStatusBadge = (status: string) => {
@@ -182,7 +180,7 @@ export default function MyWorkflowPage() {
     router.push(`/${fullName}`);
   };
 
-  if (!isLoggedIn && !isLoading) {
+  if (!isLoggedIn && !isLoading && status !== 'loading') {
     return (
       <div className="relative min-h-screen pt-20 pb-10 px-4">
         <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-8 text-center">
@@ -190,12 +188,15 @@ export default function MyWorkflowPage() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m0 0v2m0-2h2m-2 0H9m3-4V8m0 0V6m0 2h2M9 10h2"></path>
           </svg>
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Login Required</h2>
-          <p className="text-gray-600 mb-6">Please login with your GitHub account to view your workflows</p>
+          <p className="text-gray-600 mb-6">Please log in with your GitHub account to view your workflows</p>
           <button 
-            onClick={() => router.push('/')}
-            className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors"
+            onClick={handleLogin}
+            className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors flex items-center justify-center mx-auto gap-2"
           >
-            Return to Home
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+              <path fillRule="evenodd" clipRule="evenodd" d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+            </svg>
+            GitHub Login
           </button>
         </div>
       </div>

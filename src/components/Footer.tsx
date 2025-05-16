@@ -1,8 +1,8 @@
 import React from 'react';
 
 /**
- * 页脚组件
- * 简洁的页脚设计
+ * Footer component
+ * Clean footer design
  */
 export default function Footer() {
   return (

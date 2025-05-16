@@ -1,0 +1,16 @@
+{
+  "Nakiswen/react/react": {
+    "claimed": false,
+    "lastChecked": "2023-10-15T12:00:00Z"
+  },
+  "facebook/react/react-dom": {
+    "claimed": true,
+    "claimedBy": "user123",
+    "claimedAt": "2023-09-10T08:15:30Z",
+    "walletAddress": "0x123456789abcdef0123456789abcdef012345678"
+  },
+  "vuejs/vue/core": {
+    "claimed": false,
+    "lastChecked": "2023-10-14T15:30:00Z"
+  }
+} 

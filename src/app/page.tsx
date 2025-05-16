@@ -72,16 +72,34 @@ export default function Home() {
 
   // Handle keyboard navigation
   const handleSearchKey = (e: React.KeyboardEvent) => {
-    console.log("🚀 ~ saveToHistory ~ saveToHistory:", selectedIndex)
     // Handle direction key navigation
     if (e.key === 'ArrowDown' && showDropdown) {
-      setSelectedIndex(Math.min(selectedIndex + 1, currentSearchData.length - 1));
+      // When the user first presses the arrow key (no item selected)
+      if (selectedIndex === -1) {
+        setSelectedIndex(0); // Select the first item
+      } 
+      // If already at the last item, loop back to the first item
+      else if (selectedIndex >= currentSearchData.length - 1) {
+        setSelectedIndex(0);
+      }
+      else {
+        setSelectedIndex(selectedIndex + 1);
+      }
       e.preventDefault();
       return;
     }
     
     if (e.key === 'ArrowUp' && showDropdown) {
-      setSelectedIndex(Math.max(selectedIndex - 1, 0));
+      // When the user first presses the arrow key (no item selected)
+      if (selectedIndex === -1) {
+        setSelectedIndex(currentSearchData.length - 1); // Select the last item
+      }
+      // If currently on the first item, select the last item
+      else if (selectedIndex <= 0) {
+        setSelectedIndex(currentSearchData.length - 1);
+      } else {
+        setSelectedIndex(selectedIndex - 1);
+      }
       e.preventDefault();
       return;
     }
@@ -89,6 +107,7 @@ export default function Home() {
     // Handle Escape key
     if (e.key === 'Escape') {
       setShowDropdown(false);
+      setSelectedIndex(-1); // Reset selection
       return;
     }
     
@@ -96,16 +115,45 @@ export default function Home() {
     if (e.key === 'Enter') {
       e.preventDefault();
       
-      // Check if input field has content
-      if (searchQuery.trim()) {
-        // Check if user selected a search result with up/down keys
-        if (showDropdown && selectedIndex >= 0 && selectedIndex < currentSearchData.length) {
-          // User selected an item from search results
-      const selectedItem = currentSearchData[selectedIndex];
-      saveToHistory(selectedItem);
-          router.push(selectedItem.url);
+      try {
+        // Check if input field has content
+        if (searchQuery.trim()) {
+          console.log('Enter pressed with query:', searchQuery, 'selectedIndex:', selectedIndex);
+          
+          // Ensure dropdown is displayed and a valid option is selected
+          if (showDropdown && selectedIndex >= 0 && selectedIndex < currentSearchData.length) {
+            console.log('Item selected from dropdown:', currentSearchData[selectedIndex]);
+            // User selected an item from search results
+            const selectedItem = currentSearchData[selectedIndex];
+            saveToHistory(selectedItem);
+            
+            // Ensure URL path is correct
+            if (selectedItem && selectedItem.url) {
+              console.log('Navigating to:', selectedItem.url);
+              router.push(selectedItem.url);
+            } else {
+              console.error('Selected item has no valid URL');
+              handleCustomSearch(searchQuery); // Fall back to processing input
+            }
+          } else {
+            console.log('Processing direct input:', searchQuery);
+            // User didn't select a search result, process input directly
+            handleCustomSearch(searchQuery);
+          }
         } else {
-          // User didn't select a search result, process input directly
+          const selectedItem = currentSearchData[selectedIndex];
+          if (selectedItem && selectedItem.url) {
+            console.log('Navigating to:', selectedItem.url);
+            router.push(selectedItem.url);
+          } else {
+            console.error('Selected item has no valid URL');
+            handleCustomSearch(searchQuery); // Fall back to processing input
+          }
+        }
+      } catch (error) {
+        console.error('Error handling Enter key:', error);
+        // On error, fall back to processing direct input
+        if (searchQuery.trim()) {
           handleCustomSearch(searchQuery);
         }
       }
@@ -117,6 +165,9 @@ export default function Home() {
     // Extract organization and repository names from GitHub repository URL
     let org, repo;
     
+    // Clean query string, remove leading and trailing spaces
+    query = query.trim();
+    
     // Remove prefix symbols (like @)
     if (query.startsWith('@')) {
       query = query.substring(1);
@@ -125,7 +176,16 @@ export default function Home() {
     // Handle GitHub URL format
     if (query.includes('github.com')) {
       try {
-        const url = new URL(query);
+        // Try parsing with URL API first
+        let url: URL;
+        
+        // Ensure URL has protocol prefix
+        if (!query.startsWith('http://') && !query.startsWith('https://')) {
+          url = new URL('https://' + query);
+        } else {
+          url = new URL(query);
+        }
+        
         const pathParts = url.pathname.split('/').filter(Boolean);
         if (pathParts.length >= 2) {
           org = pathParts[0];
@@ -138,7 +198,7 @@ export default function Home() {
         if (match && match.length >= 3) {
           org = match[1];
           repo = match[2];
-    }
+        }
       }
     } else {
       // Handle org/repo format input
@@ -148,6 +208,10 @@ export default function Home() {
         repo = parts[1];
       }
     }
+    
+    // Clean org and repo values, remove possible illegal characters
+    if (org) org = org.trim().replace(/[^\w.-]/g, '');
+    if (repo) repo = repo.trim().replace(/[^\w.-]/g, '');
     
     // If organization and repository names are successfully extracted, build URL and navigate
     if (org && repo) {
@@ -211,6 +275,39 @@ export default function Home() {
     };
   }, []);
 
+  // Ensure selected item is in view
+  useEffect(() => {
+    if (showDropdown && selectedIndex >= 0 && dropdownRef.current) {
+      try {
+        const dropdownList = dropdownRef.current.querySelector('.max-h-60');
+        if (dropdownList) {
+          const selectedElement = dropdownList.children[selectedIndex] as HTMLElement;
+          if (selectedElement) {
+            // Calculate if element is in view
+            const containerTop = dropdownList.scrollTop;
+            const containerBottom = containerTop + dropdownList.clientHeight;
+            const elementTop = selectedElement.offsetTop;
+            const elementBottom = elementTop + selectedElement.clientHeight;
+
+            // If element is not in view, scroll to visible position
+            if (elementTop < containerTop) {
+              dropdownList.scrollTop = elementTop;
+            } else if (elementBottom > containerBottom) {
+              dropdownList.scrollTop = elementBottom - dropdownList.clientHeight;
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error scrolling to selected item:', error);
+      }
+    }
+  }, [selectedIndex, showDropdown]);
+
+  const onFocus = () => {
+    setShowDropdown(true);
+    setSelectedIndex(-1); // Reset to unselected state
+  }
+
   return (
     <main className="homepage-container relative z-10">
       <Background />
@@ -231,7 +328,7 @@ export default function Home() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={() => setShowDropdown(true)}
+              onFocus={() => onFocus()}
               onKeyDown={handleSearchKey}
               className="w-full pl-12 pr-24 py-3 rounded-2xl bg-white/90 shadow-lg border border-gray-200 focus:ring-2 focus:ring-primary focus:border-transparent text-lg text-gray-900 placeholder-gray-400 transition-all duration-200 outline-none"
               placeholder="Search by github repo url ..."
@@ -265,21 +362,27 @@ export default function Home() {
                   {currentSearchData.map((item, idx) => (
                     <div
                       key={idx}
-                      className={`flex items-center gap-3 px-6 py-3 cursor-pointer transition bg-white/0 hover:bg-primary/10 ${
-                        idx === selectedIndex ? 'bg-primary/10' : ''
+                      className={`flex items-center gap-3 px-6 py-3 cursor-pointer transition border-l-4 ${
+                        idx === selectedIndex 
+                          ? 'bg-primary/20 border-primary' 
+                          : 'bg-white/0 hover:bg-primary/10 border-transparent'
                       } group`}
                       onClick={() => handleSelectSearchItem(item)}
-                      onMouseOver={() => setSelectedIndex(idx)}
+                      onMouseEnter={() => setSelectedIndex(idx)}
                     >
                       <img src={item.icon} alt="icon" className="w-7 h-7 rounded-md bg-gray-100 object-contain" />
                       <div className="flex-1 min-w-0">
-                        <div className="font-semibold text-gray-900 text-base text-left">{item.title}</div>
+                        <div className={`font-semibold text-base text-left ${
+                          idx === selectedIndex ? 'text-primary' : 'text-gray-900'
+                        }`}>{item.title}</div>
                         <div className="text-xs text-gray-400 flex gap-2 items-center">
                           <span className="truncate">{item.desc}</span>
                         </div>
                       </div>
                       {item.action && (
-                        <span className="text-primary text-xs font-bold ml-2">
+                        <span className={`text-xs font-bold ml-2 ${
+                          idx === selectedIndex ? 'text-primary-dark' : 'text-primary'
+                        }`}>
                           {item.action}
                           <svg className="inline-block" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                             <path d="M5 12h14M12 5l7 7-7 7" />
@@ -306,15 +409,6 @@ export default function Home() {
                 </div>
               </div>
             )}
-          </div>
-          
-          {/* Search statistics */}
-          <div className="mt-2 text-gray-400 text-sm select-none">
-            <svg className="inline-block mr-1" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M12 6v6l4 2" />
-            </svg>
-            50,031 searches and counting ...
           </div>
         </div>
       </div>

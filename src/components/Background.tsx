@@ -1,13 +1,13 @@
 import React from 'react';
 
 /**
- * 背景组件，提供网站的视觉底层
- * 包含背景图片、网格和渐变效果
+ * Background component, provides the visual foundation for the website
+ * Includes background image, grid and gradient effects
  */
 export default function Background() {
   return (
     <>
-      {/* 背景图片 */}
+      {/* Background image */}
       <div className="fixed inset-0 z-0 overflow-hidden">
         <img
           src="/assets/bg.webp"
@@ -16,7 +16,7 @@ export default function Background() {
         />
       </div>
 
-      {/* 网格背景叠加 */}
+      {/* Grid background overlay */}
       <div
         className="fixed inset-0 z-0 pointer-events-none select-none"
         style={{
@@ -38,7 +38,7 @@ export default function Background() {
         }}
       ></div>
 
-      {/* 柔光径向渐变 */}
+      {/* Soft radial gradient */}
       <div
         className="fixed inset-0 z-0 pointer-events-none select-none"
         style={{

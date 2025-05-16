@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 /**
- * Workflows布局组件
- * 包含面包屑导航
+ * Workflows Layout Component
+ * Contains breadcrumb navigation
  */
 export default function WorkflowsLayout({
   children,
@@ -15,27 +15,27 @@ export default function WorkflowsLayout({
 }) {
   const pathname = usePathname();
 
-  // 根据路径生成面包屑项
+  // Generate breadcrumb items based on path
   const getBreadcrumbItems = () => {
     const pathParts = pathname.split('/').filter(Boolean);
     const items = [
       { label: 'Workflows', href: '/workflows' },
     ];
 
-    // 移除 'workflows' 前缀，处理剩余路径
-    const relevantParts = pathParts.slice(1); // 去掉 'workflows'
+    // Remove 'workflows' prefix, process remaining path
+    const relevantParts = pathParts.slice(1); // Remove 'workflows'
     
     if (relevantParts.length >= 2) {
-      // 处理组织和仓库，将它们合并为一个面包屑
+      // Process organization and repository, merge them into one breadcrumb
       const [org, repo] = relevantParts;
       
-      // 将org和repo合并为一个面包屑项
+      // Merge org and repo into one breadcrumb item
       items.push({
         label: `${org}/${repo}`,
         href: `/workflows/${org}/${repo}`,
       });
       
-      // 如果包含 steps
+      // If includes 'steps'
       if (relevantParts[2] === 'steps') {
         items.push({
           label: 'steps',
@@ -49,7 +49,7 @@ export default function WorkflowsLayout({
 
   return (
     <div className="min-h-screen">
-      {/* 顶部导航栏 */}
+      {/* Top navigation bar */}
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
@@ -62,7 +62,7 @@ export default function WorkflowsLayout({
         </div>
       </header>
 
-      {/* 面包屑导航 */}
+      {/* Breadcrumb navigation */}
       <nav className="relative border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center space-x-2 h-12 pl-4 ml-4">
@@ -99,7 +99,7 @@ export default function WorkflowsLayout({
         </div>
       </nav>
 
-      {/* 主内容区域 */}
+      {/* Main content area */}
       <div className="bg-gray-50 flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           {children}

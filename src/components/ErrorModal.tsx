@@ -9,17 +9,17 @@ interface ErrorModalProps {
 }
 
 /**
- * 错误提示弹窗组件
- * 用于展示操作失败的友好提示，提供详细错误信息和解决方案
- * @param message 错误信息内容
- * @param onClose 关闭弹窗的回调函数
- * @param isOpen 控制弹窗是否显示
+ * Error Notification Modal Component
+ * Used to display friendly notifications for failed operations, providing detailed error information and solutions
+ * @param message Error message content
+ * @param onClose Callback function to close the modal
+ * @param isOpen Controls whether the modal is displayed
  */
 const ErrorModal: React.FC<ErrorModalProps> = ({ message, onClose, isOpen }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
 
-  // 监听isOpen状态变化，控制弹窗的显示和淡出效果
+  // Monitor changes in isOpen state, control the display and fade-out effect of the modal
   useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
@@ -27,26 +27,26 @@ const ErrorModal: React.FC<ErrorModalProps> = ({ message, onClose, isOpen }) => 
     } else {
       if (isVisible) {
         setIsClosing(true);
-        // 添加延迟，确保动画完成后才真正隐藏弹窗
+        // Add delay to ensure the animation completes before actually hiding the modal
         const timer = setTimeout(() => {
           setIsVisible(false);
-        }, 300); // 与CSS动画时长匹配
+        }, 300); // Match the CSS animation duration
         return () => clearTimeout(timer);
       }
     }
   }, [isOpen, isVisible]);
 
-  // 处理关闭弹窗
+  // Handle closing the modal
   const handleClose = () => {
     setIsClosing(true);
-    // 添加延迟，确保动画完成后才触发onClose回调
+    // Add delay to ensure the animation completes before triggering the onClose callback
     setTimeout(() => {
       onClose();
       setIsVisible(false);
     }, 300);
   };
 
-  // 如果弹窗不可见，不渲染任何内容
+  // If the modal is not visible, don't render any content
   if (!isVisible) return null;
 
   return (
@@ -55,60 +55,60 @@ const ErrorModal: React.FC<ErrorModalProps> = ({ message, onClose, isOpen }) => 
         isClosing ? 'opacity-0' : 'opacity-100'
       }`}
     >
-      {/* 背景遮罩 */}
+      {/* Background overlay */}
       <div 
         className="fixed inset-0 bg-black/60 backdrop-blur-sm"
         onClick={handleClose}
       ></div>
       
-      {/* 弹窗内容 */}
+      {/* Modal content */}
       <div 
         className={`relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-md w-full overflow-hidden transform transition-all duration-300 ${
           isClosing ? 'scale-95 opacity-0' : 'scale-100 opacity-100'
         }`}
       >
-        {/* 顶部图标和标题 */}
+        {/* Top icon and title */}
         <div className="px-6 pt-6 pb-2 text-center">
           <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-4">
             <svg className="h-10 w-10 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">操作失败</h3>
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white">Operation Failed</h3>
         </div>
         
-        {/* 错误消息内容 */}
+        {/* Error message content */}
         <div className="px-6 py-4">
           <p className="text-sm text-gray-600 dark:text-gray-300">
             {message}
           </p>
           
-          {/* 可能的解决方案提示 */}
+          {/* Possible solutions */}
           <div className="mt-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              您可以尝试以下解决方案：
+              You can try the following solutions:
             </p>
             <ul className="mt-2 text-xs text-gray-500 dark:text-gray-400 list-disc list-inside">
-              <li>检查您的网络连接是否稳定</li>
-              <li>确认您有足够的权限进行此操作</li>
-              <li>稍后再试或联系平台支持团队</li>
+              <li>Check if your network connection is stable</li>
+              <li>Ensure you have sufficient permissions for this operation</li>
+              <li>Try again later or contact platform support</li>
             </ul>
           </div>
         </div>
         
-        {/* 操作按钮 */}
+        {/* Action buttons */}
         <div className="px-6 py-4 bg-gray-50 dark:bg-gray-700/30 flex justify-end space-x-3">
           <button
             onClick={handleClose}
             className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md transition-colors"
           >
-            关闭
+            Close
           </button>
           <button
             onClick={handleClose}
             className="px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary/90 rounded-md shadow-sm transition-colors"
           >
-            我知道了
+            Got it
           </button>
         </div>
       </div>

@@ -2,10 +2,10 @@
 
 import React, { useEffect, useRef } from 'react';
 import hljs from 'highlight.js';
-// 预先导入常用语言支持
+// Pre-import common language support
 import 'highlight.js/lib/common';
 import 'highlight.js/styles/github.css';
-// 不需要在这里引入，会在各页面中引入
+// No need to import here, will be imported in individual pages
 
 interface CodeBlockProps {
   code: string;
@@ -16,8 +16,8 @@ interface CodeBlockProps {
 }
 
 /**
- * GitHub风格的代码展示组件
- * 支持语法高亮、行号、文件名等功能
+ * GitHub-style code display component
+ * Supports syntax highlighting, line numbers, filenames and other features
  */
 const CodeBlock: React.FC<CodeBlockProps> = ({
   code,
@@ -34,21 +34,21 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
         const preElement = preRef.current;
         preElement.innerHTML = '';
         
-        // 创建代码容器
+        // Create code container
         const codeContainer = document.createElement('code');
         codeContainer.className = 'block w-full';
         preElement.appendChild(codeContainer);
         
-        // 分割代码行
+        // Split code into lines
         const codeLines = code.split('\n');
         
-        // 为每一行创建元素
+        // Create elements for each line
         codeLines.forEach((line, index) => {
           const lineNumber = startingLineNumber + index;
           const lineElement = document.createElement('div');
           lineElement.className = 'code-line';
           
-          // 创建行号元素
+          // Create line number element
           if (showLineNumbers) {
             const lineNumberElement = document.createElement('span');
             lineNumberElement.className = 'line-number';
@@ -56,14 +56,14 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
             lineElement.appendChild(lineNumberElement);
           }
           
-          // 创建代码内容元素
+          // Create code content element
           const codeContentElement = document.createElement('span');
           codeContentElement.className = 'code-content';
           
-          // 获取此行的高亮HTML
+          // Get highlighted HTML for this line
           let lineHighlighted;
           if (line.trim() === '') {
-            lineHighlighted = '&nbsp;'; // 空行处理
+            lineHighlighted = '&nbsp;'; // Handle empty lines
           } else {
             try {
               lineHighlighted = hljs.highlight(line, { language }).value;
@@ -79,8 +79,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
         });
       }
     } catch (error) {
-      console.error('代码高亮处理错误:', error);
-      // 发生错误时显示原始代码
+      console.error('Code highlighting error:', error);
+      // Show original code when error occurs
       if (preRef.current) {
         preRef.current.textContent = code;
       }

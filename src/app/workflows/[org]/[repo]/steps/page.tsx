@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { getDependencyDetails } from '@/lib/api';
-import '@/styles/highlight.css'; // 修正为全局样式路径
+import '@/styles/highlight.css'; // Corrected to global style path
 import CodeBlock from '@/components/CodeBlock';
 
 interface StepPageProps {
@@ -14,8 +14,8 @@ interface StepPageProps {
 }
 
 /**
- * 工作流步骤详情页面
- * 以水平pipeline方式展示处理流程
+ * Workflow Steps Detail Page
+ * Displays the processing flow in a horizontal pipeline
  */
 export default function WorkflowStepsPage() {
   const params = useParams();
@@ -24,63 +24,63 @@ export default function WorkflowStepsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // 水平工作流步骤定义 - 基于区块链流程图
+  // Horizontal workflow step definitions - based on blockchain flow chart
   const workflowSteps = [
     {
       id: 1,
-      title: '生成凭证',
-      description: '为项目依赖生成贡献凭证',
+      title: 'Generate Credentials',
+      description: 'Generate contribution credentials for project dependencies',
       status: 'completed'
     },
     {
       id: 2,
-      title: '询问',
-      description: '从贡献凭证中引用信息进行询问',
+      title: 'Inquiry',
+      description: 'Make inquiries using information from contribution credentials',
       status: 'in_progress'
     },
     {
       id: 3,
-      title: '签认书',
-      description: '生成依赖关系的签认文档',
+      title: 'Acknowledgment',
+      description: 'Generate acknowledgment documents for dependency relationships',
       status: 'pending'
     },
     {
       id: 4,
-      title: '交易记录',
-      description: '记录依赖贡献交易信息',
+      title: 'Transaction Record',
+      description: 'Record dependency contribution transaction information',
       status: 'pending'
     },
     {
       id: 5,
-      title: '领取记录',
-      description: '记录贡献奖励领取信息',
+      title: 'Claim Record',
+      description: 'Record contribution reward claim information',
       status: 'pending'
     },
     {
       id: 6,
-      title: '公证',
-      description: '完成依赖贡献的区块链公证',
+      title: 'Notarization',
+      description: 'Complete blockchain notarization of dependency contributions',
       status: 'pending'
     }
   ];
 
-  // 获取依赖详情
+  // Get dependency details
   useEffect(() => {
     const fetchDependencyDetails = async () => {
       try {
         setIsLoading(true);
-        // 由于API只接受一个参数，我们将org和repo组合成一个标识符
+        // Since the API only accepts one parameter, we combine org and repo into an identifier
         const dependencyId = `${org}/${repo}`;
         const result = await getDependencyDetails(dependencyId);
         if (result.success) {
           setDependencyData(result.data);
           setError(null);
         } else {
-          setError(result.message || '获取依赖详情失败');
+          setError(result.message || 'Failed to fetch dependency details');
         }
       } catch (error) {
         console.error('Failed to fetch dependency details:', error);
-        setError('获取依赖详情失败');
+        setError('Failed to fetch dependency details');
       } finally {
         setIsLoading(false);
       }
@@ -89,7 +89,7 @@ export default function WorkflowStepsPage() {
     fetchDependencyDetails();
   }, [org, repo]);
 
-  // 渲染步骤状态图标
+  // Render step status icon
   const renderStepIcon = (status: string) => {
     switch (status) {
       case 'completed':
@@ -121,17 +121,17 @@ export default function WorkflowStepsPage() {
 
   return (
     <div className="space-y-8">
-      {/* 区块链流程标题 */}
+      {/* Blockchain Process Title */}
       <div className="relative bg-white shadow-sm rounded-lg p-6">
         <h2 className="text-xl font-bold text-center text-gray-900 mb-6">Workflow Steps</h2>
         
-        {/* 水平步骤展示 */}
+        {/* Horizontal Steps Display */}
         <div className="relative mt-8 mb-4">          
-          {/* 步骤列表 - 水平排列 */}
+          {/* Steps List - Horizontal Layout */}
           <div className="flex items-center justify-center relative z-10">
             {workflowSteps.map((step, index) => (
               <React.Fragment key={step.id}>
-                {/* 步骤元素 */}
+                {/* Step Element */}
                 <div className="flex flex-col items-center">
                   {renderStepIcon(step.status)}
                   <div className="text-center mt-3">
@@ -148,7 +148,7 @@ export default function WorkflowStepsPage() {
                   </div>
                 </div>
                 
-                {/* 添加步骤之间的箭头 */}
+                {/* Add arrows between steps */}
                 {index < workflowSteps.length - 1 && (
                   <div className="flex-shrink-0 mx-2">
                     <svg className="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -164,7 +164,7 @@ export default function WorkflowStepsPage() {
 
       </div>
 
-      {/* 依赖详情 */}
+      {/* Dependency Details */}
       {isLoading ? (
         <div className="relative bg-white shadow-sm rounded-lg p-6">
           <div className="flex justify-center items-center py-10">
@@ -188,15 +188,15 @@ export default function WorkflowStepsPage() {
         </div>
       ) : dependencyData && (
         <div className="relative bg-white shadow-sm rounded-lg p-6">
-          <h2 className="text-lg font-medium text-gray-900 mb-6">依赖详情</h2>
+          <h2 className="text-lg font-medium text-gray-900 mb-6">Dependency Details</h2>
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <p className="text-sm text-gray-500">贡献者</p>
+                <p className="text-sm text-gray-500">Contributor</p>
                 <p className="mt-1 text-gray-900">{dependencyData.contributor}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">贡献度</p>
+                <p className="text-sm text-gray-500">Contribution</p>
                 <div className="mt-1 flex items-center">
                   <div className="flex-1 h-2 bg-gray-200 rounded-full">
                     <div 

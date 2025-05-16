@@ -1,0 +1,11 @@
+{
+  "success": true,
+  "message": "Reward claimed successfully",
+  "data": {
+    "transactionId": "0x987654321abcdef0987654321abcdef098765432",
+    "amount": "0.05 ETH",
+    "wallet": "0x384e3ae4d5efc9471201039b555eae496b2",
+    "dependency": "react",
+    "claimedAt": "2023-10-20T09:45:22Z"
+  }
+} 

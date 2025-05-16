@@ -1,4 +1,4 @@
-// 默认搜索数据
+// Default search data
 export const defaultSearchData = [
     {
       icon: "https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png",

@@ -24,8 +24,8 @@ interface Dependency {
 }
 
 /**
- * 项目方视角的依赖列表页
- * 显示所有需要处理的依赖包
+ * Project owner's view of dependency list page
+ * Shows all dependencies that need to be processed
  */
 export default function DependenciesPage({ params }: DependencyPageProps) {
   const { org, repo } = params;
@@ -34,22 +34,22 @@ export default function DependenciesPage({ params }: DependencyPageProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // 获取所有依赖列表数据
+  // Get all dependency list data
   useEffect(() => {
     const fetchDependencies = async () => {
       try {
         setIsLoading(true);
-        // 这里应该调用获取项目方所有依赖的API
-        const result = await getDependencyList(org, repo); // 空参数表示获取所有依赖
+        // This should call the API to get all dependencies for the project owner
+        const result = await getDependencyList(org, repo); // Empty parameter means get all dependencies
         console.log("🚀 ~ fetchDependencies ~ result:", result)
         if (result.success) {
           setDependencies(result.data.list);
           setError(null);
         } else {
-          setError(result.message || '获取依赖数据失败');
+          setError(result.message || 'Failed to fetch dependency data');
         }
       } catch (err) {
-        setError('获取依赖数据失败');
+        setError('Failed to fetch dependency data');
         console.error('Failed to fetch dependencies:', err);
       } finally {
         setIsLoading(false);
@@ -59,12 +59,12 @@ export default function DependenciesPage({ params }: DependencyPageProps) {
     fetchDependencies();
   }, []);
 
-  // 渲染状态标签
+  // Render status badge
   const renderStatusBadge = (status: 'completed' | 'in_progress' | 'pending') => {
     const statusConfig: Record<string, { color: string; text: string }> = {
-      completed: { color: 'bg-green-100 text-green-800', text: '已完成' },
-      in_progress: { color: 'bg-blue-100 text-blue-800', text: '进行中' },
-      pending: { color: 'bg-gray-100 text-gray-800', text: '待处理' },
+      completed: { color: 'bg-green-100 text-green-800', text: 'Completed' },
+      in_progress: { color: 'bg-blue-100 text-blue-800', text: 'In Progress' },
+      pending: { color: 'bg-gray-100 text-gray-800', text: 'Pending' },
     };
 
     const config = statusConfig[status] || statusConfig.pending;
@@ -77,17 +77,17 @@ export default function DependenciesPage({ params }: DependencyPageProps) {
 
   return (
     <div className="relative bg-white shadow-sm rounded-lg">
-      {/* 表格头部 */}
+      {/* Table header */}
       <div className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-gray-200 bg-gray-50 text-sm font-medium text-gray-500">
-        <div className="col-span-3">依赖名称</div>
-        <div className="col-span-2">所属仓库</div>
-        <div className="col-span-2">贡献者</div>
-        <div className="col-span-2">贡献度</div>
-        <div className="col-span-2">状态</div>
-        <div className="col-span-1">操作</div>
+        <div className="col-span-3">Dependency Name</div>
+        <div className="col-span-2">Repository</div>
+        <div className="col-span-2">Contributor</div>
+        <div className="col-span-2">Contribution</div>
+        <div className="col-span-2">Status</div>
+        <div className="col-span-1">Action</div>
       </div>
 
-      {/* 加载状态 */}
+      {/* Loading state */}
       {isLoading && (
         <div className="px-6 py-10 text-center text-gray-500">
           <div className="inline-block animate-spin mr-2">
@@ -96,11 +96,11 @@ export default function DependenciesPage({ params }: DependencyPageProps) {
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
           </div>
-          正在加载依赖数据...
+          Loading dependency data...
         </div>
       )}
 
-      {/* 错误信息 */}
+      {/* Error message */}
       {!isLoading && error && (
         <div className="px-6 py-10 text-center text-red-500">
           <svg className="w-6 h-6 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -110,7 +110,7 @@ export default function DependenciesPage({ params }: DependencyPageProps) {
         </div>
       )}
 
-      {/* 数据列表 */}
+      {/* Data list */}
       {!isLoading && !error && dependencies.length > 0 && (
         <div className="divide-y divide-gray-200">
           {dependencies.map((item, index) => (
@@ -152,7 +152,7 @@ export default function DependenciesPage({ params }: DependencyPageProps) {
                   className="text-primary hover:text-secondary"
                   onClick={() => router.push(`/workflows/${org}/${repo}/steps`)}
                 >
-                  详情
+                  Details
                 </button>
               </div>
             </div>
@@ -160,10 +160,10 @@ export default function DependenciesPage({ params }: DependencyPageProps) {
         </div>
       )}
 
-      {/* 空状态 */}
+      {/* Empty state */}
       {!isLoading && !error && dependencies.length === 0 && (
         <div className="px-6 py-10 text-center text-gray-500">
-          暂无依赖数据
+          No dependency data available
         </div>
       )}
     </div>

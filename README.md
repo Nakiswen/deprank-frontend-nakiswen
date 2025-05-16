@@ -1,155 +1,155 @@
-# DepRank - 开源贡献度分析与分配系统
+# DepRank - Open Source Contribution Analysis and Allocation System
 
-DepRank是一个用于跟踪软件项目之间依赖关系和贡献度的开源系统，旨在提高开源协作的透明度和效率。该项目使用Next.js 15和React 19构建，采用TypeScript和TailwindCSS进行开发。
+DepRank is an open source system for tracking dependencies and contributions between software projects, designed to improve the transparency and efficiency of open source collaboration. The project is built with Next.js 15 and React 19, using TypeScript and TailwindCSS for development.
 
-## 项目概述
+## Project Overview
 
-DepRank提供以下核心功能：
+DepRank provides the following core features:
 
-- **依赖关系分析**：追踪项目之间的依赖关系图谱
-- **贡献度评估**：分析和展示开发者对各个依赖包的贡献度
-- **代码片段查看**：支持高亮显示特定依赖包的代码片段
-- **贡献度分配**：允许用户申领对特定依赖包的贡献
+- **Dependency Analysis**: Track dependency relationships between projects
+- **Contribution Assessment**: Analyze and display developer contributions to various dependencies
+- **Code Snippet Viewing**: Support for highlighting specific dependency code snippets
+- **Contribution Allocation**: Allow users to claim contributions to specific dependencies
 
-## 技术栈
+## Technology Stack
 
-- **前端框架**：Next.js 15 (App Router)、React 19
-- **样式**：TailwindCSS 3.4
-- **语言**：TypeScript 5
-- **代码高亮**：highlight.js 11
-- **构建工具**：Turbopack
+- **Frontend Framework**: Next.js 15 (App Router), React 19
+- **Styling**: TailwindCSS 3.4
+- **Language**: TypeScript 5
+- **Code Highlighting**: highlight.js 11
+- **Build Tool**: Turbopack
 
-## 项目结构
+## Project Structure
 
 ```
 deprank-frontend/
 ├── src/
-│   ├── app/                    # Next.js App Router路由
-│   │   ├── dependency/[name]/  # 依赖包详情页
-│   │   ├── analysis/           # 贡献度分析页
-│   │   ├── globals.css         # 全局样式
-│   │   ├── layout.tsx          # 布局组件
-│   │   └── page.tsx            # 首页
-│   ├── components/             # 可复用组件
-│   │   ├── Background.tsx      # 背景组件
-│   │   ├── CodeBlock.tsx       # 代码块展示组件
-│   │   ├── Footer.tsx          # 页脚组件
-│   │   └── Navbar.tsx          # 导航栏组件
-├── public/                     # 静态资源
-├── assets/                     # 项目资源
-└── designs/                    # 设计资源
+│   ├── app/                    # Next.js App Router routes
+│   │   ├── dependency/[name]/  # Dependency details page
+│   │   ├── analysis/           # Contribution analysis page
+│   │   ├── globals.css         # Global styles
+│   │   ├── layout.tsx          # Layout component
+│   │   └── page.tsx            # Home page
+│   ├── components/             # Reusable components
+│   │   ├── Background.tsx      # Background component
+│   │   ├── CodeBlock.tsx       # Code block display component
+│   │   ├── Footer.tsx          # Footer component
+│   │   └── Navbar.tsx          # Navigation bar component
+├── public/                     # Static resources
+├── assets/                     # Project assets
+└── designs/                    # Design resources
 ```
 
-## 快速开始
+## Quick Start
 
-### 环境要求
+### Requirements
 
 - Node.js 18+
-- pnpm 8+ (推荐) 或 npm 9+
+- pnpm 8+ (recommended) or npm 9+
 
-### 安装依赖
+### Installing Dependencies
 
 ```bash
-# 使用pnpm (推荐)
+# Using pnpm (recommended)
 pnpm install
 
-# 或使用npm
+# Or using npm
 npm install
 ```
 
-### 开发模式
+### Development Mode
 
 ```bash
-# 使用Turbopack启动开发服务器
+# Start development server with Turbopack
 pnpm dev
 
-# 或使用npm
+# Or using npm
 npm run dev
 ```
 
-开发服务器将在 [http://localhost:3000](http://localhost:3000) 启动。
+The development server will start at [http://localhost:3000](http://localhost:3000).
 
-### 构建生产版本
+### Building for Production
 
 ```bash
 pnpm build
-# 或
+# Or
 npm run build
 ```
 
-### 启动生产服务器
+### Starting Production Server
 
 ```bash
 pnpm start
-# 或
+# Or
 npm run start
 ```
 
-## 主要页面
+## Main Pages
 
-1. **首页** (`/`)
-   - 提供搜索功能，允许用户通过GitHub仓库URL查找依赖包
-   - 支持键盘快捷键（⌘+K）快速访问搜索
+1. **Home Page** (`/`)
+   - Provides search functionality, allowing users to find dependencies via GitHub repository URL
+   - Supports keyboard shortcuts (⌘+K) for quick access to search
 
-2. **依赖详情页** (`/dependency/[name]`)
-   - 展示特定依赖包的详细信息
-   - 显示代码片段，支持语法高亮
-   - 提供贡献度信息和申领功能
+2. **Dependency Details Page** (`/dependency/[name]`)
+   - Displays detailed information about specific dependencies
+   - Shows code snippets with syntax highlighting
+   - Provides contribution information and claim functionality
 
-3. **分析页** (`/analysis`)
-   - 列出所有依赖包及其贡献者信息
-   - 提供搜索和筛选功能
-   - 可视化展示贡献度百分比
+3. **Analysis Page** (`/analysis`)
+   - Lists all dependencies and their contributor information
+   - Provides search and filtering capabilities
+   - Visualizes contribution percentages
 
-## 组件说明
+## Component Information
 
 ### CodeBlock
 
-代码块展示组件，支持：
-- 语法高亮（基于highlight.js）
-- 行号显示
-- 文件名显示
-- 自定义起始行号
+Code block display component, supporting:
+- Syntax highlighting (based on highlight.js)
+- Line number display
+- Filename display
+- Custom starting line number
 
 ### Navbar
 
-顶部导航栏组件，包含项目Logo和导航链接。
+Top navigation bar component, containing project logo and navigation links.
 
 ### Background
 
-页面背景组件，提供视觉效果。
+Page background component, providing visual effects.
 
 ### Footer
 
-页脚组件，包含版权信息和链接。
+Footer component, containing copyright information and links.
 
-## 开发指南
+## Development Guide
 
-### 添加新页面
+### Adding New Pages
 
-1. 在`src/app`目录下创建新文件夹和`page.tsx`文件
-2. 使用Next.js的App Router路由规则进行路由配置
+1. Create new folder and `page.tsx` file in the `src/app` directory
+2. Use Next.js App Router routing rules for routing configuration
 
-### 添加新组件
+### Adding New Components
 
-1. 在`src/components`目录下创建新的`.tsx`文件
-2. 遵循现有组件的命名和结构规范
-3. 使用TailwindCSS进行样式设计
+1. Create new `.tsx` file in the `src/components` directory
+2. Follow existing component naming and structure conventions
+3. Use TailwindCSS for styling
 
-### 代码规范
+### Code Standards
 
-- 使用TypeScript类型定义确保类型安全
-- 遵循React函数组件和Hooks的最佳实践
-- 使用ESLint进行代码质量检查
+- Use TypeScript type definitions to ensure type safety
+- Follow best practices for React functional components and Hooks
+- Use ESLint for code quality checking
 
-## 贡献指南
+## Contribution Guidelines
 
-1. Fork本仓库
-2. 创建功能分支 (`git checkout -b feature/amazing-feature`)
-3. 提交更改 (`git commit -m 'Add some amazing feature'`)
-4. 推送到分支 (`git push origin feature/amazing-feature`)
-5. 创建Pull Request
+1. Fork this repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Create a Pull Request
 
-## 许可证
+## License
 
 [MIT License](LICENSE)
