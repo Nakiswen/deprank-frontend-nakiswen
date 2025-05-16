@@ -9,19 +9,17 @@ import "@/styles/highlight.css"; // Corrected to global style path
 import { useSession } from "next-auth/react";
 import { checkClaimStatus, claimReward } from "@/lib/api";
 
-interface ClaimPageProps {
-  params: {
-    org: string;
-    repo: string;
-    dependency: string;
-  };
+interface Params {
+  org: string;
+  repo: string;
+  dependency: string;
 }
 
 /**
  * Claim reward page
  * Allows contributors to enter wallet address to claim rewards
  */
-export default function ClaimPage({ params }: ClaimPageProps) {
+export default function ClaimPage({ params }: { params: Params }) {
   const { org, repo, dependency } = params;
   const router = useRouter();
   const { data: session, status } = useSession();
