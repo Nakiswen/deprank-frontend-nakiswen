@@ -98,7 +98,7 @@ export default function DependencyDetailPage({ params }: DependencyDetailPagePro
         // Process contributor information
         let contributors: Contributor[] = [];
         if (dependencyData.contributors && Array.isArray(dependencyData.contributors)) {
-          contributors = dependencyData.contributors.map((contributor: any) => {
+          contributors = dependencyData.contributors.map((contributor: Contributor) => {
             const username = contributor.username?.startsWith('@') 
               ? contributor.username.substring(1) 
               : contributor.username;

@@ -1,17 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { getDependencyDetails } from '@/lib/api';
 import '@/styles/highlight.css'; // Corrected to global style path
 import CodeBlock from '@/components/CodeBlock';
 
-interface StepPageProps {
-  params: {
-    dependency: string;
-  };
-}
 
 /**
  * Workflow Steps Detail Page
@@ -20,7 +14,7 @@ interface StepPageProps {
 export default function WorkflowStepsPage() {
   const params = useParams();
   const { org, repo } = params as { org: string; repo: string };
-  const [dependencyData, setDependencyData] = useState<any>(null);
+  const [dependencyData, setDependencyData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

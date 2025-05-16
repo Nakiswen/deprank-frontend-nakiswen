@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Background from '@/components/Background';
 import { useSession } from 'next-auth/react';
 import { createMultisigWallet } from '@/lib/api';
-import Link from 'next/link';
 
 interface WalletPageProps {
   params: {
@@ -21,7 +20,7 @@ interface WalletPageProps {
 export default function WalletPage({ params }: WalletPageProps) {
   const { org, repo } = params;
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const [walletAddress, setWalletAddress] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const [error, setError] = useState('');
@@ -80,7 +79,7 @@ export default function WalletPage({ params }: WalletPageProps) {
     try {
       // Call API to create multisig wallet
       const result = await createMultisigWallet(org, repo, walletAddress);
-      
+      console.log(result);
       // Save workflow status
       try {
         // Use sessionStorage to store workflow status
@@ -184,7 +183,7 @@ export default function WalletPage({ params }: WalletPageProps) {
             
             <div className="mb-8">
               <div className="relative pl-8 border-l-2 border-primary">
-                {workflowSteps.map((step, index) => (
+                {workflowSteps.map((step) => (
                   <div key={step.id} className="mb-8 relative">
                     <div className={`absolute left-[-17px] w-8 h-8 rounded-full flex items-center justify-center ${
                       step.status === 'in_progress' 

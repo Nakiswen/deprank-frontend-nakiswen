@@ -23,7 +23,7 @@ export default function AuthCallback() {
     const state = searchParams.get('state');
     const code = searchParams.get('code');
     const errorParam = searchParams.get('error');
-    let redirectPath = state ? decodeURIComponent(state) : '/';
+    const redirectPath = state ? decodeURIComponent(state) : '/';
     
     // If there's an error parameter in the URL, process it immediately
     if (errorParam) {
@@ -58,6 +58,7 @@ export default function AuthCallback() {
           } else {
             setError('Authorization failed, unable to get user information. Please try logging in again.');
             setIsLoading(false);
+            console.log(isLoading);
             return;
           }
         }
@@ -96,6 +97,7 @@ export default function AuthCallback() {
     try {
       await signIn('github', { callbackUrl: '/', redirect: true });
     } catch (err) {
+      console.log("🚀 ~ handleRetry ~ err:", err)
       setError('Retry failed, please return to the homepage and login again');
       setIsLoading(false);
     }

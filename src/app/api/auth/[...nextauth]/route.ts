@@ -82,7 +82,7 @@ export const authOptions: NextAuthOptions = {
     },
     
     // Handle login process
-    async signIn({ user, account, profile, email, credentials }) {
+    async signIn({ user }) {
       try {
         // Validate required user information
         if (!user || !user.email) {

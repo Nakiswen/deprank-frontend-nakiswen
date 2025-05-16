@@ -24,7 +24,6 @@ interface ClaimPageProps {
 export default function ClaimPage({ params }: ClaimPageProps) {
   const { org, repo, dependency } = params;
   const router = useRouter();
-  const pathname = usePathname();
   const { data: session, status } = useSession();
   const [walletAddress, setWalletAddress] = useState('');
   const [isClaiming, setIsClaiming] = useState(false);

@@ -25,6 +25,17 @@ interface Dependency {
   lastUpdated: string;
 }
 
+interface DependencyListDataItem {
+  name: string;
+  org: string;
+  repo: string;
+  contributor: string;
+  contributors: Contributor[];
+  contributionPercentage: number;
+  lastUpdated: string;
+  status: "completed" | "in_progress" | "pending";
+}
+
 /**
  * Dependency List Page
  * Displays a list of dependency packages for a specific GitHub repository
@@ -60,7 +71,7 @@ export default function DependencyListPage({ params }: DependencyPageProps) {
         const result = await getDependencyList(org, repo);
         if (result.success) {
           // Process data returned from API, ensure contributors is in array format
-          const processedData = result.data.list.map((item: any) => {
+          const processedData = result.data.list.map((item: DependencyListDataItem) => {
             // If contributors from API is not in array format, convert it to array format
             let contributors: Contributor[] = [];
 
@@ -103,7 +114,7 @@ export default function DependencyListPage({ params }: DependencyPageProps) {
                 }
               }
             } else if (Array.isArray(item.contributors)) {
-              contributors = item.contributors.map((c: any) => ({
+              contributors = item.contributors.map((c: Contributor) => ({
                 username: typeof c === "string" ? c : c.username || "unknown",
                 avatarUrl: getGithubAvatarUrl(
                   typeof c === "string" ? c : c.username || "unknown"
