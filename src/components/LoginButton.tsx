@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 /**
  * GitHub Login Button Component
