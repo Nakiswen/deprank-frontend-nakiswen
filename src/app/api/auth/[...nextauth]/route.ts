@@ -112,6 +112,7 @@ const authOptions: NextAuthOptions = {
   jwt: {
     // Use default encryption method, but can be overridden here
     // secret: process.env.NEXTAUTH_SECRET,
+    secret: process.env.NEXTAUTH_SECRET,
   },
 
   // Enable debug mode (only in development environment)
