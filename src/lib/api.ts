@@ -18,18 +18,21 @@ interface Contributor {
   avatarUrl: string;
 }
 
+export interface DependencyListDataItem {
+  name: string;
+  org: string;
+  repo: string;
+  contributor: string;
+  contributors: Contributor[];
+  contributionPercentage: number;
+  lastUpdated: string;
+  status: "completed" | "in_progress" | "pending"; // Add workflow status
+  codeSnippet?: string;
+}
+
 // Dependency list response data
-interface DependencyListData {
-  list: Array<{
-    name: string;
-    org: string;
-    repo: string;
-    contributor: string;
-    contributors: Contributor[];
-    contributionPercentage: number;
-    lastUpdated: string;
-    status: "completed" | "in_progress" | "pending"; // Add workflow status
-  }>;
+export interface DependencyListData {
+  list: Array<DependencyListDataItem>;
   isProjectOwner: boolean; // Add project owner perspective flag
 }
 

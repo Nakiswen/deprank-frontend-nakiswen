@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Background from "@/components/Background";
 import SuccessAnimation from "@/components/SuccessAnimation";
 import ErrorModal from "@/components/ErrorModal";
@@ -19,7 +19,8 @@ interface Params {
  * Claim reward page
  * Allows contributors to enter wallet address to claim rewards
  */
-export default function ClaimPage({ params }: { params: Params }) {
+export default function ClaimPage() {
+  const params = useParams() as unknown as Params;
   const { org, repo, dependency } = params;
   const router = useRouter();
   const { data: session, status } = useSession();

@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "next lint --fix"
+    "lint:fix": "next lint --fix",
+    "clean": "./scripts/clean-build.sh"
   },
   "dependencies": {
     "@types/canvas-confetti": "^1.9.0",

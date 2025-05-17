@@ -1,17 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import Background from "@/components/Background";
 import { getDependencyList } from "@/lib/api";
 import { useSession, signIn } from "next-auth/react";
-
-interface DependencyPageProps {
-  params: {
-    org: string;
-    repo: string;
-  };
-}
 
 interface Contributor {
   username: string;
@@ -40,8 +34,9 @@ interface DependencyListDataItem {
  * Dependency List Page
  * Displays a list of dependency packages for a specific GitHub repository
  */
-export default function DependencyListPage({ params }: DependencyPageProps) {
-  const { org, repo } = params;
+export default function DependencyListPage() {
+  const params = useParams();
+  const { org, repo } = params as { org: string; repo: string };
   const { data: session, status } = useSession();
   const [isProjectOwner, setIsProjectOwner] = useState(false);
   const [dependencies, setDependencies] = useState<Dependency[]>([]);
@@ -50,7 +45,7 @@ export default function DependencyListPage({ params }: DependencyPageProps) {
   const [hasCreatedWallet, setHasCreatedWallet] = useState(false);
 
   // Check if user is logged in
-  const isLoggedIn = status === 'authenticated' && !!session;
+  const isLoggedIn = status === "authenticated" && !!session;
 
   // Function to generate GitHub avatar URL
   const getGithubAvatarUrl = (username: string) => {
@@ -71,70 +66,72 @@ export default function DependencyListPage({ params }: DependencyPageProps) {
         const result = await getDependencyList(org, repo);
         if (result.success) {
           // Process data returned from API, ensure contributors is in array format
-          const processedData = result.data.list.map((item: DependencyListDataItem) => {
-            // If contributors from API is not in array format, convert it to array format
-            let contributors: Contributor[] = [];
+          const processedData = result.data.list.map(
+            (item: DependencyListDataItem) => {
+              // If contributors from API is not in array format, convert it to array format
+              let contributors: Contributor[] = [];
 
-            // Simulate multiple contributor data (for demo purposes only)
-            if (item.contributor) {
-              // Main contributor
-              contributors.push({
-                username: item.contributor,
-                avatarUrl: getGithubAvatarUrl(item.contributor),
-              });
+              // Simulate multiple contributor data (for demo purposes only)
+              if (item.contributor) {
+                // Main contributor
+                contributors.push({
+                  username: item.contributor,
+                  avatarUrl: getGithubAvatarUrl(item.contributor),
+                });
 
-              // For demonstration effect, add some randomly generated contributors
-              const randomContributors = [
-                "octocat",
-                "torvalds",
-                "gaearon",
-                "yyx990803",
-                "sindresorhus",
-                "tj",
-                "defunkt",
-                "mojombo",
-                "pjhyett",
-                "wycats",
-              ];
+                // For demonstration effect, add some randomly generated contributors
+                const randomContributors = [
+                  "octocat",
+                  "torvalds",
+                  "gaearon",
+                  "yyx990803",
+                  "sindresorhus",
+                  "tj",
+                  "defunkt",
+                  "mojombo",
+                  "pjhyett",
+                  "wycats",
+                ];
 
-              // Randomly select 2-6 additional contributors
-              const count = Math.floor(Math.random() * 5) + 2;
-              for (let i = 0; i < count; i++) {
-                const randomIndex = Math.floor(
-                  Math.random() * randomContributors.length
-                );
-                const username = randomContributors[randomIndex];
+                // Randomly select 2-6 additional contributors
+                const count = Math.floor(Math.random() * 5) + 2;
+                for (let i = 0; i < count; i++) {
+                  const randomIndex = Math.floor(
+                    Math.random() * randomContributors.length
+                  );
+                  const username = randomContributors[randomIndex];
 
-                // Ensure no duplicates
-                if (!contributors.some((c) => c.username === username)) {
-                  contributors.push({
-                    username,
-                    avatarUrl: getGithubAvatarUrl(username),
-                  });
+                  // Ensure no duplicates
+                  if (!contributors.some((c) => c.username === username)) {
+                    contributors.push({
+                      username,
+                      avatarUrl: getGithubAvatarUrl(username),
+                    });
+                  }
                 }
+              } else if (Array.isArray(item.contributors)) {
+                contributors = item.contributors.map((c: Contributor) => ({
+                  username: typeof c === "string" ? c : c.username || "unknown",
+                  avatarUrl: getGithubAvatarUrl(
+                    typeof c === "string" ? c : c.username || "unknown"
+                  ),
+                }));
+              } else {
+                // Default case, create an anonymous contributor with default avatar
+                contributors = [
+                  {
+                    username: "Anonymous Contributor",
+                    avatarUrl: defaultAvatarUrl,
+                  },
+                ];
               }
-            } else if (Array.isArray(item.contributors)) {
-              contributors = item.contributors.map((c: Contributor) => ({
-                username: typeof c === "string" ? c : c.username || "unknown",
-                avatarUrl: getGithubAvatarUrl(
-                  typeof c === "string" ? c : c.username || "unknown"
-                ),
-              }));
-            } else {
-              // Default case, create an anonymous contributor with default avatar
-              contributors = [
-                {
-                  username: "Anonymous Contributor",
-                  avatarUrl: defaultAvatarUrl,
-                },
-              ];
-            }
 
-            return {
-              ...item,
-              contributors,
-            };
-          });
+              return {
+                ...item,
+                contributors,
+              };
+            }
+          );
 
           setDependencies(processedData);
           setIsProjectOwner(result.data.isProjectOwner); // Set project owner view flag
@@ -162,21 +159,23 @@ export default function DependencyListPage({ params }: DependencyPageProps) {
         // Check if multisig wallet has been created
         try {
           // First try to get status from sessionStorage
-          const workflowStatus = sessionStorage.getItem(`workflow_${org}_${repo}`);
-          setHasCreatedWallet(workflowStatus === 'started');
-          
+          const workflowStatus = sessionStorage.getItem(
+            `workflow_${org}_${repo}`
+          );
+          setHasCreatedWallet(workflowStatus === "started");
+
           // In production environment, this should call API to get workflow status saved on server
           // Example: const result = await getWorkflowStatus(org, repo);
           // setHasCreatedWallet(result.data.status === 'started');
         } catch (e) {
-          console.error('Failed to check wallet status:', e);
+          console.error("Failed to check wallet status:", e);
           setHasCreatedWallet(false);
         }
       } catch (error) {
-        console.error('Failed to check wallet status:', error);
+        console.error("Failed to check wallet status:", error);
       }
     };
-    
+
     checkWalletStatus();
   }, [org, repo]);
 
@@ -187,29 +186,31 @@ export default function DependencyListPage({ params }: DependencyPageProps) {
         // Use NextAuth for GitHub authorization login
         // Pass current page path for redirection after authorization
         setIsLoading(true);
-        const result = await signIn('github', { 
+        const result = await signIn("github", {
           callbackUrl: `/${org}/${repo}`,
-          redirect: false // Set to false first to check result
+          redirect: false, // Set to false first to check result
         });
-        
+
         if (result?.error) {
-          console.error('Login failed:', result.error);
+          console.error("Login failed:", result.error);
           // Show error message, but can still continue
-          alert(`Login failed: ${result.error}. Please refresh the page and try again.`);
+          alert(
+            `Login failed: ${result.error}. Please refresh the page and try again.`
+          );
         } else if (result?.url) {
           // Manually redirect to returned URL
           window.location.href = result.url;
         }
         return;
       }
-      
+
       // If already logged in, jump to multisig wallet page
       window.location.href = `/${org}/${repo}/wallet`;
     } catch (error) {
-      console.error('Workflow start failed:', error);
+      console.error("Workflow start failed:", error);
       setIsLoading(false);
       // Show error to user
-      alert('Operation failed, please try again later');
+      alert("Operation failed, please try again later");
     }
   };
 
@@ -309,8 +310,12 @@ export default function DependencyListPage({ params }: DependencyPageProps) {
             <div className="col-span-4 font-semibold text-gray-900">
               Dependency Name
             </div>
-            <div className="col-span-3 font-semibold text-gray-900">Contributor</div>
-            <div className="col-span-2 font-semibold text-gray-900">Contribution</div>
+            <div className="col-span-3 font-semibold text-gray-900">
+              Contributor
+            </div>
+            <div className="col-span-2 font-semibold text-gray-900">
+              Contribution
+            </div>
             <div className="col-span-3 font-semibold text-gray-900">
               Last Updated
             </div>

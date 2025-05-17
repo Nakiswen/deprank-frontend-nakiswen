@@ -1,9 +1,7 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
-import { NextAuthOptions } from "next-auth";
 
-// Configure NextAuth
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID || "",
@@ -11,7 +9,7 @@ export const authOptions: NextAuthOptions = {
       // Request GitHub API permissions
       authorization: {
         params: {
-          scope: 'read:user user:email',
+          scope: "read:user user:email",
         },
       },
       // Add HTTP request configuration to resolve timeout issues
@@ -28,12 +26,12 @@ export const authOptions: NextAuthOptions = {
         token.accessToken = account.access_token;
         token.tokenType = account.token_type;
         token.provider = account.provider;
-        
+
         // Save GitHub username
         if (profile.login) {
           token.username = profile.login;
         }
-        
+
         // Save user ID
         if (user?.id) {
           token.userId = user.id;
@@ -41,16 +39,16 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
-    
+
     // Process session
     async session({ session, token }) {
       // Session information sent to client
-      if (token && typeof token === 'object') {
+      if (token && typeof token === "object") {
         // Add token information to session
         session.accessToken = token.accessToken;
         session.tokenType = token.tokenType;
         session.provider = token.provider;
-        
+
         // Add user details
         if (session.user) {
           session.user.username = token.username;
@@ -59,11 +57,11 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
-    
+
     // Handle redirects, ensure redirect URL is valid
     async redirect({ url, baseUrl }) {
       // Handle absolute URL case
-      if (url.startsWith('http')) {
+      if (url.startsWith("http")) {
         const urlObj = new URL(url);
         // Ensure domain matches or is an allowed domain
         if (urlObj.origin === baseUrl) {
@@ -71,16 +69,16 @@ export const authOptions: NextAuthOptions = {
         }
         return baseUrl;
       }
-      
+
       // Handle relative URL case
-      if (url.startsWith('/')) {
+      if (url.startsWith("/")) {
         return `${baseUrl}${url}`;
       }
-      
+
       // Default return base URL
       return baseUrl;
     },
-    
+
     // Handle login process
     async signIn({ user }) {
       try {
@@ -89,7 +87,7 @@ export const authOptions: NextAuthOptions = {
           console.error("User information is incomplete", { user });
           return false;
         }
-        
+
         return true; // Allow login
       } catch (error) {
         console.error("Error occurred during login process:", error);
@@ -97,28 +95,28 @@ export const authOptions: NextAuthOptions = {
       }
     },
   },
-  
+
   // Custom pages
   pages: {
-    signIn: '/',  // Use homepage as login page
-    error: '/auth/error', // Error page
+    signIn: "/", // Use homepage as login page
+    error: "/auth/error", // Error page
   },
-  
+
   // Session configuration
   session: {
     strategy: "jwt", // Use JWT strategy
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
-  
+
   // JWT configuration
   jwt: {
     // Use default encryption method, but can be overridden here
     // secret: process.env.NEXTAUTH_SECRET,
   },
-  
+
   // Enable debug mode (only in development environment)
-  debug: process.env.NODE_ENV === 'development',
-  
+  debug: process.env.NODE_ENV === "development",
+
   // Event handling
   events: {
     async signIn({ user }) {
@@ -131,17 +129,17 @@ export const authOptions: NextAuthOptions = {
       console.error("Authentication error:", error);
     },
   },
-  
+
   // Add CORS headers
-  useSecureCookies: process.env.NODE_ENV === 'production',
+  useSecureCookies: process.env.NODE_ENV === "production",
   cookies: {
     sessionToken: {
       name: `next-auth.session-token`,
       options: {
         httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        secure: process.env.NODE_ENV === 'production',
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
       },
     },
   },
@@ -149,4 +147,4 @@ export const authOptions: NextAuthOptions = {
 
 // Export NextAuth handler
 const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST }; 
+export { handler as GET, handler as POST };
